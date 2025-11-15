@@ -1,0 +1,26 @@
+[project]
+name = "triage-service"
+version = "0.1.0"
+requires-python = ">=3.12"
+readme = "README.md"
+dependencies = [
+    "temporalio>=1.5.0",
+    "requests>=2.31.0",
+    "pydantic-ai>=0.0.14",
+    "pydantic>=2.0.0",
+    "triage-agent @ {root:uri}/../triage_agent",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["*.py"]
+

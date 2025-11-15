@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Triage Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        tbody tr { cursor: pointer; }
+        tbody tr:hover { background-color: #ddd; }
+        .priority-1 { color: red; font-weight: bold; }
+        .priority-2 { color: orange; }
+        .priority-3 { color: green; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 5px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #000; }
+        .detail-row { margin: 10px 0; }
+        .detail-label { font-weight: bold; display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Triage Cases Dashboard</h1>
+        <p>Total Cases: {{ total }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Case ID</th>
+                    <th>Channel</th>
+                    <th>Category</th>
+                    <th>Sentiment</th>
+                    <th>Priority</th>
+                    <th>Subject</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="caseItem in cases" :key="caseItem.case_id" @click="openModal(caseItem)">
+                    <td>{{ caseItem.id }}</td>
+                    <td>{{ caseItem.case_id }}</td>
+                    <td>{{ caseItem.channel }}</td>
+                    <td>{{ caseItem.category }}</td>
+                    <td>{{ caseItem.sentiment }}</td>
+                    <td :class="'priority-' + caseItem.priority">{{ caseItem.priority }}</td>
+                    <td>{{ caseItem.subject }}</td>
+                    <td>{{ caseItem.created_at }}</td>
+                    <td>{{ caseItem.updated_at }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="modal" :style="{display: showModal ? 'block' : 'none'}">
+            <div class="modal-content">
+                <span class="close" @click="closeModal">&times;</span>
+                <h2>Case Details</h2>
+                <div v-if="selectedCase">
+                    <div class="detail-row"><span class="detail-label">ID:</span> {{ selectedCase.id }}</div>
+                    <div class="detail-row"><span class="detail-label">Case ID:</span> {{ selectedCase.case_id }}</div>
+                    <div class="detail-row"><span class="detail-label">Channel:</span> {{ selectedCase.channel }}</div>
+                    <div class="detail-row"><span class="detail-label">Category:</span> {{ selectedCase.category }}</div>
+                    <div class="detail-row"><span class="detail-label">Sentiment:</span> {{ selectedCase.sentiment }}</div>
+                    <div class="detail-row"><span class="detail-label">Priority:</span> {{ selectedCase.priority }}</div>
+                    <div class="detail-row"><span class="detail-label">Subject:</span> {{ selectedCase.subject }}</div>
+                    <div class="detail-row"><span class="detail-label">Content:</span><br>{{ selectedCase.content }}</div>
+                    <div class="detail-row"><span class="detail-label">Created At:</span> {{ selectedCase.created_at }}</div>
+                    <div class="detail-row"><span class="detail-label">Updated At:</span> {{ selectedCase.updated_at }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    cases: [],
+                    total: 0,
+                    showModal: false,
+                    selectedCase: null
+                }
+            },
+            mounted() {
+                this.fetchCases();
+                setInterval(this.fetchCases, 1000);
+                window.addEventListener('keydown', this.handleKeydown);
+            },
+            methods: {
+                async fetchCases() {
+                    try {
+                        const response = await fetch('/api/cases');
+                        const data = await response.json();
+                        this.cases = data.cases;
+                        this.total = data.total;
+                    } catch (error) {
+                        console.error('Error fetching cases:', error);
+                    }
+                },
+                openModal(caseItem) {
+                    this.selectedCase = caseItem;
+                    this.showModal = true;
+                },
+                closeModal() {
+                    this.showModal = false;
+                },
+                handleKeydown(e) {
+                    if (e.key === 'Escape' && this.showModal) {
+                        this.closeModal();
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
