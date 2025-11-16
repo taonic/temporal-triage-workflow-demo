@@ -5,7 +5,9 @@ import httpx
 
 app = FastAPI()
 
-TRIAGE_SERVICE_URL = "http://localhost:8000"
+import os
+
+TRIAGE_SERVICE_URL = os.getenv('TRIAGE_SERVICE_URL', 'http://localhost:8000')
 
 @app.get("/", response_class=HTMLResponse)
 async def root():

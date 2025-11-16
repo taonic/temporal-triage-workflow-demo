@@ -31,12 +31,14 @@ REQUEST_TOPICS = [
 
 def generate_mock_email():
     topic = random.choice(REQUEST_TOPICS)
+    account_id = f"ACC-{random.randint(1, 5):03d}"
     
     prompt = f"""Generate a realistic customer email to a bank about: {topic}
 
 Include:
 - A brief subject line
 - Customer's concern or request in 2-3 sentences
+- In some emails, mention the account ID: {account_id} naturally in the body
 - Choose random tones with positive or negative sentiment
 
 Format as JSON with keys: subject, body"""
@@ -56,7 +58,7 @@ Format as JSON with keys: subject, body"""
     except Exception as e:
         print(f"LLM generation failed: {e}")
         subject = f'Customer Request: {topic}'
-        body = f'I need assistance with {topic}. Please help me resolve this matter.'
+        body = f'I need assistance with {topic} for my account {account_id}. Please help me resolve this matter.'
     
     return {
         "id": str(uuid.uuid4()),

@@ -4,12 +4,14 @@ from triage_workflow import EmailTriageWorkflow
 
 with workflow.unsafe.imports_passed_through():
     import requests
+    import os
 
 @activity.defn
 async def poll_graph_api() -> list:
     """Poll the graph API for new emails"""
     try:
-        response = requests.get("http://localhost:6001/v1.0/me/messages/delta")
+        graph_url = os.getenv('GRAPH_SERVICE_URL', 'http://localhost:6001')
+        response = requests.get(f"{graph_url}/v1.0/me/messages/delta")
         response.raise_for_status()
         data = response.json()
         return data.get("value", [])

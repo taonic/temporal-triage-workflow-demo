@@ -14,6 +14,7 @@ class TriageActivities:
             case_id=case_id,
             channel='email',
             category=result.category,
+            account_status=result.account_status,
             sentiment=result.sentiment,
             priority=result.priority,
             subject=result.subject,

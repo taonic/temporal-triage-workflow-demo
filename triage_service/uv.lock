@@ -2000,23 +2000,6 @@ wheels = [
 ]
 
 [[package]]
-name = "triage-agent"
-version = "0.1.0"
-source = { directory = "../triage_agent" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "pydantic-ai" },
-    { name = "temporalio" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2.0.0" },
-    { name = "pydantic-ai", extras = ["temporal"], specifier = ">=1.18.0" },
-    { name = "temporalio", specifier = ">=1.5.0" },
-]
-
-[[package]]
 name = "triage-service"
 version = "0.1.0"
 source = { editable = "." }
@@ -2026,7 +2009,6 @@ dependencies = [
     { name = "pydantic-ai" },
     { name = "requests" },
     { name = "temporalio" },
-    { name = "triage-agent" },
     { name = "uvicorn" },
 ]
 
@@ -2037,7 +2019,6 @@ requires-dist = [
     { name = "pydantic-ai", specifier = ">=0.0.14" },
     { name = "requests", specifier = ">=2.31.0" },
     { name = "temporalio", specifier = ">=1.5.0" },
-    { name = "triage-agent", directory = "../triage_agent" },
     { name = "uvicorn", specifier = ">=0.32.0" },
 ]
 

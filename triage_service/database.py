@@ -15,6 +15,7 @@ class TriageDatabase:
                 case_id TEXT UNIQUE NOT NULL,
                 channel TEXT NOT NULL,
                 category TEXT,
+                account_status TEXT,
                 sentiment TEXT,
                 priority INTEGER,
                 subject TEXT,
@@ -32,14 +33,14 @@ class TriageDatabase:
             CREATE INDEX idx_priority ON triage_cases(priority)
         """)
     
-    def store_triage(self, case_id: str, channel: str, category: str = None, 
+    def store_triage(self, case_id: str, channel: str, category: str = None, account_status: str = None,
                     sentiment: str = None, priority: int = None, subject: str = None, content: str = None,
                     requester: str = None, recipient: str = None) -> int:
         cursor = self.conn.execute("""
             INSERT OR REPLACE INTO triage_cases 
-            (case_id, channel, category, sentiment, priority, subject, content, requester, recipient, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (case_id, channel, category, sentiment, priority, subject, content, requester, recipient, datetime.now()))
+            (case_id, channel, category, account_status, sentiment, priority, subject, content, requester, recipient, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (case_id, channel, category, account_status, sentiment, priority, subject, content, requester, recipient, datetime.now()))
         self.conn.commit()
         return cursor.lastrowid
     

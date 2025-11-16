@@ -1,0 +1,60 @@
+services:
+  temporal:
+    container_name: temporal-server
+    image: temporalio/server
+    entrypoint: temporal
+    command: server start-dev --ip 0.0.0.0
+    ports:
+      - 7233:7233
+      - 8233:8233
+
+  graph_service:
+    build:
+      context: ./graph_service
+    ports:
+      - "6001:6001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  account_mcp:
+    build:
+      context: ./account_mcp
+    ports:
+      - "8002:8002"
+
+  triage_agent:
+    build:
+      context: ./triage_agent
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - TEMPORAL_HOST=temporal:7233
+      - ACCOUNT_MCP_URL=http://account_mcp:8002/mcp
+    depends_on:
+      - temporal
+      - account_mcp
+
+  triage_service:
+    build:
+      context: ./triage_service
+    ports:
+      - "8000:8000"
+    environment:
+      - TEMPORAL_HOST=temporal:7233
+      - GRAPH_SERVICE_URL=http://graph_service:6001
+    depends_on:
+      - temporal
+      - graph_service
+      - triage_agent
+
+  triage_dashboard:
+    build:
+      context: ./triage_dashboard
+    ports:
+      - "8001:8001"
+    environment:
+      - TRIAGE_SERVICE_URL=http://triage_service:8000
+    depends_on:
+      - triage_service
+
+volumes:
+  postgres-data:

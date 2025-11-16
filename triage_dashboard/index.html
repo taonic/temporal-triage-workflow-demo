@@ -33,6 +33,7 @@
                     <th>Case ID</th>
                     <th>Channel</th>
                     <th>Category</th>
+                    <th>Account Status</th>
                     <th>Sentiment</th>
                     <th>Priority</th>
                     <th>Subject</th>
@@ -46,6 +47,7 @@
                     <td>{{ caseItem.case_id }}</td>
                     <td>{{ caseItem.channel }}</td>
                     <td>{{ caseItem.category }}</td>
+                    <td>{{ caseItem.account_status }}</td>
                     <td>{{ caseItem.sentiment }}</td>
                     <td :class="'priority-' + caseItem.priority">{{ caseItem.priority }}</td>
                     <td>{{ caseItem.subject }}</td>
@@ -64,6 +66,7 @@
                     <div class="detail-row"><span class="detail-label">Case ID:</span> {{ selectedCase.case_id }}</div>
                     <div class="detail-row"><span class="detail-label">Channel:</span> {{ selectedCase.channel }}</div>
                     <div class="detail-row"><span class="detail-label">Category:</span> {{ selectedCase.category }}</div>
+                    <div class="detail-row"><span class="detail-label">Account Status:</span> {{ selectedCase.account_status }}</div>
                     <div class="detail-row"><span class="detail-label">Sentiment:</span> {{ selectedCase.sentiment }}</div>
                     <div class="detail-row"><span class="detail-label">Priority:</span> {{ selectedCase.priority }}</div>
                     <div class="detail-row"><span class="detail-label">Subject:</span> {{ selectedCase.subject }}</div>
@@ -114,7 +117,8 @@
                     if (e.key === 'Escape' && this.showModal) {
                         this.closeModal();
                     }
-                }
+                },
+
             }
         }).mount('#app');
     </script>

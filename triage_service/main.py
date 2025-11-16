@@ -2,6 +2,7 @@ import asyncio
 import logging
 import tracemalloc
 import uvicorn
+import os
 from temporalio.client import Client
 from temporalio.worker import Worker
 from poller_workflow import EmailPollerWorkflow, poll_graph_api
@@ -12,7 +13,8 @@ from schedule_manager import create_schedule
 interrupt_event = asyncio.Event()
 
 async def run_worker(db: TriageDatabase):
-    client = await Client.connect("localhost:7233")
+    temporal_host = os.getenv('TEMPORAL_HOST', 'localhost:7233')
+    client = await Client.connect(temporal_host)
     await create_schedule(client)
     activities = TriageActivities(db)
     

@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 from temporalio.client import Client
 from temporalio.worker import Worker
 from pydantic_ai.durable_exec.temporal import (
@@ -10,8 +11,9 @@ from agent import TriageAgentWorkflow, temporal_agent
 
 async def main():
     logging.basicConfig(level=logging.INFO)
+    temporal_host = os.getenv('TEMPORAL_HOST', 'localhost:7233')
     client = await Client.connect(  
-        'localhost:7233',  
+        temporal_host,  
         plugins=[PydanticAIPlugin()],  
     )
     

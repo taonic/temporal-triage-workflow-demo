@@ -7,6 +7,7 @@ class Task(BaseModel):
     title: str
     description: str
     priority: int
+    account_status: str
     category: str
     source_case_id: str
     created_at: datetime

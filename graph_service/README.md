@@ -7,7 +7,7 @@ A minimal dummy service that exposes new emails through Graph API for polling-ba
 ```bash
 cd graph_service
 uv sync
-uv run python app.py
+uv run python main.py
 ```
 
 ## API Endpoints
