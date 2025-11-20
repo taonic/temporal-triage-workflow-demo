@@ -1,5 +1,7 @@
 # Temporal Triage Workflow Demo - Docker Setup
 
+![Architecture](architecture.gif)
+
 ## Prerequisites
 - Docker and Docker Compose
 - OpenAI API key
